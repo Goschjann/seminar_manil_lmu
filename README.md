@@ -10,10 +10,10 @@ Dataset consisting of a set of circles (_clocks_) with clock hands varying clock
 
 Images look as follows:
 
-![circle 0](graphics/circle_clockh_0.png)
-![circle 6](graphics/circle_clockh_6.png)
-![circle 15](graphics/circle_clockh_15.png)
-![circle 26](graphics/circle_clockh_26.png)
+![circle 0](circle_clockh_0.png)
+![circle 6](circle_clockh_6.png)
+![circle 15](circle_clockh_15.png)
+![circle 26](circle_clockh_26.png)
 
 Use the script `circle_2d.py` to generate them. You can play around with various command line args such as `nrows=63`, height and width of the image, `n=50` the amount of plots to create and `delta=75` to control the thickness of the clock hands. Running the script will create a folder `circle_plots` that contains a) the plots for each of the circles and b) a `rawdata_circles.csv` containing the rawdata as flattened vectors.
 
