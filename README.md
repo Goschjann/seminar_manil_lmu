@@ -53,10 +53,10 @@ Check the example file `lle_example.py` where we fit LLEs on the Circles data se
 
 Then use the file `visualize_embedding.py` to visualize your learned embedding in a standardized way. The resulting plot looks like this for 2d
 
-!['lle circles'](lle_circles_2d.png)
+!['lle circles 2d'](lle_circles_2d.png)
 
-and like this for 3-dimensional embeddings
+and like this for 3-dimensional embeddings:
 
-!['lle circles'](lle_circles_3d.png)
+!['lle circles 3d'](lle_circles_3d.png)
 
 You can use the `visualize_embedding.py` with the command line argument `--input_path`. For instance, to create the plot for the 3-dimensional embedding of the circles dataset above, run `python visualize_embedding.py --input_path/lle_circles_3d.csv` assuming you stored your embedding results in the above described format.
