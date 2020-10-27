@@ -2,7 +2,7 @@
 
 LMU, Winter Semester 2020/2021
 
-# Datasets
+# Datasets and Dataset Creation
 
 ## Clocks
 
@@ -21,15 +21,38 @@ As label `y` we use the angle of the clock hand w.r.t to a reference clock hand 
 
 ## Swiss Roll
 
-**The** standard data set for manifold learning problems. The task is to embedd a 3-dimensional, convolved dataset in a smaller embedding space. We can control parameters `n=1000` and `noise=0.0`. The input data looks as follows:
+**The** standard data set for manifold learning problems. Use the script `swiss_roll.py` to generate swiss roll data. The task is to embedd a 3-dimensional, convolved dataset in a smaller embedding space. We can control parameters `n=1000` and `noise=0.0`. The input data looks as follows:
 
 !['swiss roll'](swiss_roll.png)
 
 As label `y` we use the position according to the main dimension of each point on this manifold.
 
-## ??
+## Genome Data
 
-# Code
+From the Nature [DR Benchmark Paper](https://github.com/ebecht/DR_benchmark).
+
+tbd
+
+# Evaluation
+
+## Output format
+
+Your manifold learning script will take the above described files as an input (the rawdata as `x_1`, ..., `x_D` and the label `y`) and is expected to output the learned embedding as an .csv file with format `x_1`, ..., `x_d` and `y` where `d={2, 3}`.
+
+Check the example file `lle_example.py` where we fit LLEs on the Circles data set.
+
+## Visualization
+
+Then use the file `visualize_embedding.py` to visualize your learned embedding in a standardized way. The resulting plot looks like this for 2d
+
+!['lle circles'](lle_circles.png)
+
+and for 3-dimensional embeddings.
+
+
+
+
+
 
 ## Data Generation
 

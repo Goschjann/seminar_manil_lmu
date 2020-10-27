@@ -29,7 +29,7 @@ def generate_swiss_roll_data(args):
                                     'x_2': X[:, 1],
                                     'x_3': X[:, 2],
                                     'y': y})
-    swiss_roll_data.to_csv('swiss_roll_data/rawdata_swiss_roll.csv')
+    swiss_roll_data.to_csv('swiss_roll_data/rawdata_swiss_roll.csv', index=False)
 
     # plot it
     fig = plt.figure()
