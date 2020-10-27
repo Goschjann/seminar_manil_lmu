@@ -3,7 +3,8 @@
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
-from math import atan2
+from math import atan2, atan, degrees
+import math
 import argparse
 import pdb
 import copy
@@ -11,11 +12,11 @@ import os
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Circle plots')
-    parser.add_argument('--nrows', type=int, default=63,
+    parser.add_argument('--nrows', type=int, default=127,
                         help='pixels of the image')
-    parser.add_argument('--n', type=int, default=100,
+    parser.add_argument('--n', type=int, default=20,
                         help='max amount of plots to make')
-    parser.add_argument('--delta', type=int, default=75,
+    parser.add_argument('--delta', type=int, default=150,
                         help='delta for the clock hands distance, the larger the greater the stripe')
     parser.add_argument('--edge', type=int, default=1,
                         help='which edge position to use for the clock hands as fix point')
@@ -68,7 +69,7 @@ def draw_clock_hands(array, center, edge, delta):
 ## Main function
 #######
 
-def plot_circle(args):
+def generate_circle_data(args):
     args = parse_args()
     radius = int(args.nrows/2)
     centroid = int(np.median(np.arange(args.nrows)))
@@ -86,14 +87,32 @@ def plot_circle(args):
                 arr[i, j] = 0.0
 
     # select the edges of the circle as we want to walk alongside them
+    # calculate angle to centroid line as 'label'
+    # aka angle coordinate_centroid,coordinate_centroid_right - coordinate_centroid,edge
+    C = (centroid, centroid)
+    C_r = (centroid, centroid + radius)
+
     edges = []
+    y = []
     for i in range(1, args.nrows-1):
         for j in range(1, args.nrows-1):
             if is_edge_pixel(array=arr, coordinate=(i, j)):
                 edges.append((i, j))
+                # calculate angles as y
+                # need the atan2 built upon sin and cos vor value range [0, 360]
+                # https://math.stackexchange.com/questions/878785/how-to-find-an-angle-in-range0-360-between-2-vectors
+                RC = np.asarray((C_r[0] - C[0], C_r[1] - C[1]))
+                EC = np.asarray((i - C[0], j - C[1]))
 
-    # sort edges by arc tangent
-    edges.sort(key=lambda c:atan2(c[0], c[1]))
+                dot = np.dot(RC, EC)
+                det = np.linalg.det(np.concatenate([RC.reshape(-1, 1), EC.reshape(-1, 1)], 1))
+                angle = degrees(math.atan2(det, dot))
+
+                y.append(angle)
+
+
+    # sort edges by y
+    edges = [edge for _, edge in sorted(zip(y,edges))]
     print(f'{len(edges)} edge points')
 
     edge_idx_list = [int(foo) for foo in np.linspace(0, len(edges) - 1, args.n)]
@@ -113,9 +132,11 @@ def plot_circle(args):
         store_idx += 1
 
     # store rawdata in row-format as .csv
-    rawdata = np.concatenate(rawdata_list, 1)
-    np.savetxt(fname='circle_plots/rawdata_circles.csv', X=rawdata, delimiter=',')
+    rawdata = pd.DataFrame(np.concatenate(rawdata_list, 1).transpose())
+    rawdata.columns = [f'x_{idx}' for idx in range(rawdata.shape[1])]
+    rawdata['y'] = pd.DataFrame(y)
+    rawdata.to_csv('circle_plots/rawdata_circles.csv')
 
 if __name__ == "__main__":
     args = parse_args()
-    plot_circle(args=args)
+    generate_circle_data(args=args)
