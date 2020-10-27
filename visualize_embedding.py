@@ -3,10 +3,17 @@ from sklearn.manifold import locally_linear_embedding
 import pandas as pd
 import pdb
 import argparse
+# needed for fancy 3d plotting
+from mpl_toolkits.mplot3d import Axes3D
+Axes3D
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Circle plots')
-    parser.add_argument('--input_path', type=str, default='results/lle_circles.csv',
+    parser.add_argument('--input_path', type=str, default='example/lle_circles_3d.csv',
+                        help='input path')
+    parser.add_argument('--title', type=str, default='Embedding of Circles Dataset via LLE',
+                        help='input path')
+    parser.add_argument('--storage_name', type=str, default='lle_circles',
                         help='input path')
     return parser.parse_args()
 
@@ -21,8 +28,15 @@ def plot_embedding(args):
         fig = plt.figure()
         ax = fig.add_subplot(111)
         ax.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Spectral)
-        plt.title('Embedding of Circles Dataset via LLE')
-        plt.savefig('results/lle_circles.png', dpi=300)
+        plt.title(f'2d {args.title}')
+        plt.savefig(f'example/{args.storage_name}_2d.png', dpi=300)
+
+    elif d == 3:
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(X[:, 0], X[:, 1], X[:, 2], c=y, cmap=plt.cm.Spectral)
+        plt.title(f'3d {args.title}')
+        plt.savefig(f'example/{args.storage_name}_3d.png', dpi=300)
 
 if __name__ == "__main__":
     args = parse_args()

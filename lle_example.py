@@ -20,4 +20,4 @@ print("Reconstruction error: %g" % err)
 output = pd.DataFrame(X_r)
 output.columns = [f'x_{idx}' for idx in range(X_r.shape[1])]
 output['y'] = y
-output.to_csv('results/lle_circles.csv', index=False)
+output.to_csv(f'example/lle_circles_{d}d.csv', index=False)

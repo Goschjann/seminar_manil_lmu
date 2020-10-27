@@ -12,11 +12,11 @@ import os
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Circle plots')
-    parser.add_argument('--nrows', type=int, default=63,
+    parser.add_argument('--nrows', type=int, default=127,
                         help='pixels of the image')
-    parser.add_argument('--n', type=int, default=200,
+    parser.add_argument('--n', type=int, default=300,
                         help='max amount of plots to make')
-    parser.add_argument('--delta', type=int, default=15,
+    parser.add_argument('--delta', type=int, default=150,
                         help='delta for the clock hands distance, the larger the greater the stripe')
     parser.add_argument('--edge', type=int, default=1,
                         help='which edge position to use for the clock hands as fix point')
@@ -116,6 +116,8 @@ def generate_circle_data(args):
     print(f'{len(edges)} edge points')
 
     edge_idx_list = [int(foo) for foo in np.linspace(0, len(edges) - 1, args.n)]
+    # plot only 10 circles
+    plot_idx = np.linspace(0, len(edges) - 1, 10)
     store_idx = 0
     rawdata_list = []
     for idx in edge_idx_list:
@@ -127,9 +129,10 @@ def generate_circle_data(args):
         rawdata_list.append(arr_clockh.reshape(-1, 1))
 
         # store the plot
-        plt.close()
-        plt.imsave(fname=f'circle_data/circle_clockh_{store_idx}.png', arr=arr_clockh, dpi=150, cmap='gray')
-        store_idx += 1
+        if idx in plot_idx:
+            plt.close()
+            plt.imsave(fname=f'circle_data/circle_clockh_{store_idx}.png', arr=arr_clockh, dpi=150, cmap='gray')
+            store_idx += 1
 
     # store rawdata in row-format as .csv
     rawdata = pd.DataFrame(np.concatenate(rawdata_list, 1).transpose())
