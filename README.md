@@ -64,4 +64,4 @@ Use `visualize_embedding.py` with the command line argument `--input_path`. For 
 
 # Example Code
 
-It is your job to implement and run your method of choice on these manifold learning tasks. Refer to the script `lle_example.py` as a first example of how such an implementation could look like (simply using the `sklearn` implementation of LLE's in this case). As stated in the intro, you are also free to work with `R` for the implementation.
+It is your job to implement and run your method of choice on these manifold learning tasks. Refer to the script `lle_example.py` as a first example of how such an implementation could look like (simply using the `sklearn` implementation of LLE's in this case). Simply run the default version via `python lle_example.py` while you could check out some command line arguments. As stated in the intro, you are also free to work with `R` for the implementation.
