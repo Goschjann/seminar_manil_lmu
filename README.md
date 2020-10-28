@@ -6,6 +6,8 @@ The following code allows you to a) generate the datasets that you should evalua
 
 While the helper files in this repository are written in `python`, you can still implement your models in `R` as long as your code adheres to the input and output data format of this repository.
 
+If you encounter any issues with this codebase, please do open an issue where you describe your problem in detail.
+
 # Datasets and Dataset Creation
 
 We investigate the performance of the different methods on three datasets.
@@ -14,9 +16,7 @@ All datasets have the format `rows=samples`, `columns=features` where the column
 
 ## Clocks
 
-Dataset consisting of a set of circles (_clocks_) with clock hands varying clockwise. A perfect model is able to learn the 2-dimensional manifold and embed the clocks according to the clockwise ordering.
-
-Images look as follows:
+Dataset consisting of a set of circles (_clocks_) with clock hands varying clockwise. A perfect model is able to learn the 2-dimensional manifold and embed the clocks according to the clockwise ordering. Resulting images look as follows:
 
 ![circles](circles.gif)
 
@@ -34,7 +34,7 @@ As label `y` we use the position according to the main dimension of each point o
 
 ## World Data Set
 
-We also try to embed the world. Therefore we generated a dataset consisting of randomly sampled locations around the planet with their corresponding longitude/ latitude values. The dataset looks like this
+We also try to embed the world. Therefore we generated a dataset consisting of randomly sampled locations around the planet with their corresponding longitude/ latitude values. Run `world.py` to create the dataset. Unfortunately, this script requires a ton of dependencies and some hacky moves as it builds on top of `cartopy` and some underlying GIS-software. Don't try this at home. The dataset looks like this
 
 !['world'](world.png)
 
@@ -62,6 +62,6 @@ and like this for 3-dimensional embeddings:
 
 Use `visualize_embedding.py` with the command line argument `--input_path`. For instance, to create the plot for the 3-dimensional embedding of the circles dataset above, run `python visualize_embedding.py --input_path/lle_circles_3d.csv` assuming you stored your embedding results in the above described format.
 
-# Links
+# Example Code
 
-* [Blog using Isomap on sklearn face dataset](https://jakevdp.github.io/PythonDataScienceHandbook/05.10-manifold-learning.html)
+It is your job to implement and run your method of choice on these manifold learning tasks. Refer to the script `lle_example.py` as a first example of how such an implementation could look like (simply using the `sklearn` implementation of LLE's in this case). As stated in the intro, you are also free to work with `R` for the implementation.
