@@ -117,7 +117,7 @@ def generate_circle_data(args):
 
     edge_idx_list = [int(foo) for foo in np.linspace(0, len(edges) - 1, args.n)]
     # plot only 10 circles
-    plot_idx = np.linspace(0, len(edges) - 1, 10)
+    plot_idx = [int(idx) for idx in np.linspace(start=0, stop=len(edges) - 1, num=10)]
     store_idx = 0
     rawdata_list = []
     for idx in edge_idx_list:
