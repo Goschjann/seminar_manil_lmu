@@ -4,6 +4,7 @@
 
 import cartopy
 import os
+import pdb
 import matplotlib
 import numpy as np
 import pandas as pd
@@ -11,11 +12,12 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import cartopy.feature as cfeature
 import argparse
-from skimage.io import imread
 import cartopy.io.shapereader as shpreader
 import shapely.wkt as wkt
 import shapely
+
 from shapely.geometry import MultiPolygon
+from skimage.io import imread
 
 
 def parse_args():
@@ -37,10 +39,9 @@ def plot_single_continents():
     ax.outline_patch.set_visible(False)
     #ax.set_extent([-180, 180, -50, 70])
     for country in shpreader.Reader(countries_shp).records():
-        print(country.attributes['NAME_LONG'])
+        # print(country.attributes['NAME_LONG'])
         if country.attributes['NAME_LONG'] in ['United States','Canada']:#, 'Mexico']:
             name = country.attributes['NAME_LONG']
-            print(f'{name}, {country.geometry.__class__}')
             try:
                 ax.add_geometries(country.geometry, ccrs.Miller(), label=country.attributes['NAME_LONG'], color = 'black')
             except:
@@ -56,7 +57,6 @@ def plot_single_continents():
         if country.attributes['NAME_LONG'] in ['Brazil','Argentina', 'Peru', 'Uruguay', 'Venezuela',
                                             'Columbia', 'Bolivia', 'Colombia', 'Ecuador', 'Paraguay']:
             name = country.attributes['NAME_LONG']
-            print(f'{name}, {country.geometry.__class__}')
             try:
                 ax.add_geometries(country.geometry, ccrs.Miller(), label=country.attributes['NAME_LONG'], color = 'black')
             except:
@@ -71,7 +71,6 @@ def plot_single_continents():
     for country in shpreader.Reader(countries_shp).records():
         if country.attributes['NAME_LONG'] in ['Australia']:
             name = country.attributes['NAME_LONG']
-            print(f'{name}, {country.geometry.__class__}')
             try:
                 ax.add_geometries(country.geometry, ccrs.Miller(), label=country.attributes['NAME_LONG'], color = 'black')
             except:
@@ -92,7 +91,6 @@ def plot_single_continents():
                                             'Romania', 'Turkmenistan', 'Uzbekistan' 'Austria', 'Ireland',
                                             'United Kingdom', 'Saudi Arabia', 'Hungary']:
             name = country.attributes['NAME_LONG']
-            print(f'{name}, {country.geometry.__class__}')
             try:
                 ax.add_geometries(country.geometry, ccrs.Miller(), label=country.attributes['NAME_LONG'], color = 'black')
             except:
@@ -116,7 +114,7 @@ def plot_single_continents():
                                             'Botswana', 'Namibia', 'Senegal', 'Mali', 'Mauritania', 'Benin',
                                             'Nigeria', 'Cameroon']:
             name = country.attributes['NAME_LONG']
-            print(f'{name}, {country.geometry.__class__}')
+            print(f'{name}')
             try:
                 ax.add_geometries(country.geometry, ccrs.Miller(), label=country.attributes['NAME_LONG'], color = 'black')
             except:
@@ -184,13 +182,29 @@ def create_world_dataset(args):
     data_list = []
     continents = ['africa', 'australia', 'eurasia', 'northamerica', 'southamerica']
     for name, data in zip(continents,[X_Africa, X_Australia, X_Eurasia, X_NorthAmerica, X_SouthAmerica]):
+        # pdb.set_trace()
         temp = pd.DataFrame({'x_1': data[:, 0],
-                            'x_2': data[:, 0],
-                            'y': [name for _ in range(data.shape[0])]})
+                             'x_2': data[:, 1],
+                             'y': [name for _ in range(data.shape[0])]})
         data_list.append(temp)
     world_data = pd.concat(data_list, axis=0)
-    world_data.to_csv('world_data/rawdata_world.csv', index=False)
+    world_data.to_csv('world_data/rawdata_world_2d.csv', index=False)
     print(f'Gathered world data with {world_data.shape[0]} lon/lat samples')
+
+    # Inverse-Map to 3D space
+    p = world_data['x_1'].values * (3 * np.pi - 0.6)
+    t = world_data['x_2'].values * np.pi
+
+    x_sphere = np.sin(t) * np.cos(p)
+    y_sphere = np.sin(t) * np.sin(p)
+    z_sphere = np.cos(t)
+
+    world_3d = pd.DataFrame({'x_1': x_sphere,
+                             'x_2': y_sphere,
+                             'x_3': z_sphere,
+                             'y': world_data['y'].values})
+    world_3d.to_csv('world_data/rawdata_world_3d.csv', index=False)
+    print(f'Gathered world data with {world_data.shape[0]} 3-dimensional samples')
 
     # clean intermediate plots
     os.system('rm NorthAmerica.png SouthAmerica.png Eurasia.png Australia.png Africa.png')
