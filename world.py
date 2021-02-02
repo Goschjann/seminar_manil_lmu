@@ -18,7 +18,7 @@ import shapely
 
 from shapely.geometry import MultiPolygon
 from skimage.io import imread
-
+from mpl_toolkits import mplot3d
 
 def parse_args():
     parser = argparse.ArgumentParser(description='world')
@@ -176,7 +176,7 @@ def create_world_dataset(args):
     plt.scatter(X_Africa[:, 0], X_Africa[:, 1], c = 'darkgreen', s = 50)
 
     plt.title('World Map Data Set', fontsize = 25)
-    plt.savefig('world_data/world.png')
+    plt.savefig('world_data/world_2d.png')
 
     # concatenate to one global (hrhr) data set
     data_list = []
@@ -205,6 +205,29 @@ def create_world_dataset(args):
                              'y': world_data['y'].values})
     world_3d.to_csv('world_data/rawdata_world_3d.csv', index=False)
     print(f'Gathered world data with {world_data.shape[0]} 3-dimensional samples')
+
+    def country2int(country):
+        if country == 'africa':
+            return 1
+        elif country == 'australia':
+            return 2
+        elif country == 'eurasia':
+            return 3
+        elif country == 'northamerica':
+            return 4
+        elif country == 'southamerica':
+            return 5
+
+
+    # plot 3d
+    plt.figure(figsize=(20,15))
+    ax = plt.axes(projection = '3d')
+    ax.view_init(10, 60)
+    ax.scatter3D(world_3d['x_1'], world_3d['x_2'], - world_3d['x_3'],
+                 c = [country2int(country) for country in world_3d['y']])
+    plt.title('World Map Data Set', fontsize = 25)
+    plt.savefig('world_data/world_3d.png')
+
 
     # clean intermediate plots
     os.system('rm NorthAmerica.png SouthAmerica.png Eurasia.png Australia.png Africa.png')

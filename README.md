@@ -34,9 +34,9 @@ As label `y` we use the position according to the main dimension of each point o
 
 ## World Data Set
 
-We also try to embed the world. Therefore we generated a dataset consisting of randomly sampled locations around the planet with their corresponding longitude/ latitude values. Run `world.py` to create the dataset. Unfortunately, this script requires a ton of dependencies and some hacky moves as it builds on top of `cartopy` and some underlying GIS-software. Don't try this at home. The dataset looks like this
+We also try to embed the world. Therefore we generated a dataset consisting of 2527 randomly sampled locations around the planet with their corresponding longitude/ latitude values as a 2-dimensional version (`world_data/rawdata_world_2d.csv`) as well as a 3-dimensional version (`world_data/rawdata_world_3d.csv`). Run `world.py` to create the dataset. Unfortunately, this script requires a ton of dependencies and some hacky moves as it builds on top of `cartopy` and some underlying GIS-software. Don't try this at home. The dataset looks like this
 
-!['world'](world.png)
+!['world'](world_3d.png)
 
 As label `y` we use the corresponding continent of each sample.
 
