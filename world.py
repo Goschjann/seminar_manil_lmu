@@ -26,6 +26,19 @@ def parse_args():
                         help='amount of sampels to randomly draw, final size ~= n / 4 as 71percent of the earth is water')
     return parser.parse_args()
 
+# helper to map continents to integers for plotting purposes
+def country2int(country):
+    if country == 'africa':
+        return 1
+    elif country == 'australia':
+        return 2
+    elif country == 'eurasia':
+        return 3
+    elif country == 'northamerica':
+        return 4
+    elif country == 'southamerica':
+        return 5
+
 # helper function to plot single countries and later use this
 # data for the final world data set
 def plot_single_continents():
@@ -187,7 +200,9 @@ def create_world_dataset(args):
                              'x_2': data[:, 1],
                              'y': [name for _ in range(data.shape[0])]})
         data_list.append(temp)
+
     world_data = pd.concat(data_list, axis=0)
+    world_data['y'] = [country2int(a) for a in world_data['y']]
     world_data.to_csv('world_data/rawdata_world_2d.csv', index=False)
     print(f'Gathered world data with {world_data.shape[0]} lon/lat samples')
 
@@ -206,17 +221,6 @@ def create_world_dataset(args):
     world_3d.to_csv('world_data/rawdata_world_3d.csv', index=False)
     print(f'Gathered world data with {world_data.shape[0]} 3-dimensional samples')
 
-    def country2int(country):
-        if country == 'africa':
-            return 1
-        elif country == 'australia':
-            return 2
-        elif country == 'eurasia':
-            return 3
-        elif country == 'northamerica':
-            return 4
-        elif country == 'southamerica':
-            return 5
 
 
     # plot 3d
@@ -224,7 +228,7 @@ def create_world_dataset(args):
     ax = plt.axes(projection = '3d')
     ax.view_init(10, 60)
     ax.scatter3D(world_3d['x_1'], world_3d['x_2'], - world_3d['x_3'],
-                 c = [country2int(country) for country in world_3d['y']])
+                 c = [country for country in world_3d['y']])
     plt.title('World Map Data Set', fontsize = 25)
     plt.savefig('world_data/world_3d.png')
 
